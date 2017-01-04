@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Tree</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <script type="text/javascript" src="./js/jquery.js"></script>
+</head>
+<body>
+<div class="tree">
+    <ul>
+        <li>
+            <a href="#">总经办</a>
+            <ul>
+                <li>
+                    <a href="#">运营部</a>
+                    <ul>
+                        <li>
+                            <a href="#">运营人员甲</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">研发部</a>
+                    <ul>
+                        <li><a href="#">研发一组</a></li>
+                        <li>
+                            <a href="#">研发二组</a>
+                            <ul>
+                                <li>
+                                    <a href="#">工程师甲</a>
+                                </li>
+                                <li>
+                                    <a href="#">工程师乙</a>
+                                </li>
+                                <li>
+                                    <a href="#">工程师丙</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="#">研发三组</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    $(function() {
+        $('.tree a').hover(function() {
+            var that = $(this);
+            var html = '<div class="mask">';
+                html += '<a>添加下一级</a>'
+                html += '<a>编辑</a>'
+                html += '<a>移动到</a>'
+                html += '<a>删除</a>'
+                html += '</div>';
+            var maskHtml = $(html);
+            that.append(maskHtml);
+        }, function() {
+            var that = $(this);
+            that.find('.mask').remove();
+        })
+    });
+</script>
+</body>
+</html>
