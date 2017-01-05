@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Tree</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <script type="text/javascript" src="./js/knockout-3.4.1.js"></script>
+</head>
+<body>
+    <a href="http://www.phpddt.com/dhtml/jquery_tmpl.html">tmpl</a>
+<div class="tree">
+    <ul>
+        <li>
+            <a href="#">总经办</a>
+            <ul>
+                <li>
+                    <a href="#">运营部</a>
+                    <ul>
+                        <li>
+                            <a href="#">运营人员甲</a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="#">gcbd</a></li>
+                <li>
+                    <a href="#">研发部</a>
+                    <ul>
+                        <li><a href="#">研发一组</a></li>
+                        <li>
+                            <a href="#">研发二组</a>
+                            <ul>
+                                <li><a href="#">工程师甲</a></li>
+                                <li><a href="#">工程师乙</a></li>
+                                <li><a href="#">工程师丙</a></li>
+                            </ul>
+                        </li>
+                        <li class="brank"><a id="brank-name" href="#">研发三组</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    /*选项框弹出*/
+    $(function() {
+        $('.tree a').hover(function() {
+            var that = $(this);
+            var html = '<div class="mask">';
+                html += '<a href="#" id="addNext" onclick="addItem()">添加下级部门</a>'
+                html += '<a href="#" id="addEdit" onclick="editItem()">添加编辑</a>'
+                html += '<a href="#" id="moveTo" onclick="moveItem()">移动到</a>'
+                html += '<a href="#" id="delete" onclick="deleteItem()">删除</a>'
+                html += '</div>';
+            var maskHtml = $(html);
+            that.append(maskHtml);
+        }, function() {
+            var that = $(this);
+            that.find('.mask').remove();
+        })
+    });
+
+
+    /*添加下级部门*/
+    function addItem () {
+        var addParent = $('#addNext').parent().parent().parent();
+        var addTo = addParent.children('ul')
+        var htmlOfOne = '<li class="brank"><a id="addlink" href="#">新功能</a></li>';
+        var htmlOfTwo = '<ul><li class="brank"><a id="addlink" href="#">新功能</a></li></ul>';
+        var addHtmlOne = $(htmlOfOne);
+        var addHtmlTwo = $(htmlOfTwo);
+        // addTo.append(addHtml);
+        if (addTo.length > 0){
+            addTo.append(addHtmlOne);
+        } else {
+            addParent.append(addHtmlTwo);
+        }
+    }
+
+    /*编辑功能*/
+    function editItem () {
+        var editParent = $('#addEdit').parent().parent().parent();
+        var editContent = editParent.children('a');
+        var newName = prompt('请输入新的功能名称','');
+        editContent.text(newName);
+    }
+
+    /*移动功能*/
+    function moveItem () {
+        alert(123);
+    }
+
+    /*删除功能*/
+    function deleteItem () {
+        var detail = $('#delete').parent().parent().parent();
+        /*var detailParent = detail.parent();
+        var removeTo = detail.children('ul');
+        if (removeTo.length > 0) {
+            detailParent.remove('ul');
+        } else {
+            detail.remove();
+        }*/
+        detail.remove();
+        alert('已经删除该分支')
+    }
+
+
+
+    $('li').addClass('brank');
+
+    /*新增加内容的选项框弹出处理*/
+    $('.brank').on("mouseenter", '#addlink', function () {
+        var that = $(this);
+        var html = '<div class="mask">';
+            html += '<a href="#" id="addNext" onclick="addItem()">添加下级部门</a>'
+            html += '<a href="#" id="addEdit" onclick="editItem()">添加编辑</a>'
+            html += '<a href="#" id="moveTo" onclick="moveItem()">移动到</a>'
+            html += '<a href="#" id="delete" onclick="deleteItem()">删除</a>'
+            html += '</div>';
+        var maskHtml = $(html);
+        that.append(maskHtml);
+    });
+    $('.brank').on('mouseleave', '#addlink', function() {
+        var that = $(this);
+        that.find('.mask').remove();
+    })
+</script>
+</body>
+</html>
