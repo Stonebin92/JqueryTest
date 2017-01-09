@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scroll</title>
+    <script type="text/javascript" src="./js/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="./js/knockout-3.3.0.js"></script>
+    <style type="text/css">
+        #main { height: 500px; width: 500px; overflow: scroll; }
+        #main div { background-color: #eee; margin: 5px; height: 100px; }
+        img { margin-left: 10px; width: 16px; height: 16px; }
+    </style>
+</head>
+<body>
+    <div>
+        <span data-bind="text: items().length"></span>
+        <img src="http://tools-loading.qiniudn.com/loading072.gif" data-bind="visible: pendingRequest" />
+    </div>
+
+    <div id="main" data-bind="foreach: items, event: { scroll: scrolled }"><div>
+</body>
+<script type="text/javascript">
+        var viewModel = {
+            items: ko.observableArray([]),
+            scrolled: function(data, event) {
+                var elem = event.target;
+                if (elem.scrollTop > (elem.scrollHeight - elem.offsetHeight - 200)) {
+                    getItems(20);
+                }
+            },
+            maxId: 0,
+            pendingRequest: ko.observable(false)
+        };
+
+
+        function getItems(cnt) {
+            if (!viewModel.pendingRequest()) {
+                //create fake data to pass to echo service
+                var entries = [];
+                for (var i = 0; i < cnt; i++) {
+                    var id = viewModel.maxId++;
+                    entries.push({
+                        id: id,
+                        name: "Name" + id
+                    });
+                }
+
+                viewModel.pendingRequest(true);
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'scroll.json',
+                    data: {
+                        json: ko.toJSON(entries),
+                        delay: .1
+                    },
+                    success: function(entries) {
+                        ko.utils.arrayForEach(entries, function(entry) {
+                            viewModel.items.push(entry);
+                        });
+                        viewModel.pendingRequest(false);
+                    },
+                    error: function() {
+                        viewModel.pendingRequest(false);
+                    },
+                    dataType: 'json'
+                });
+            }
+        }
+
+        ko.applyBindings(viewModel);
+
+        getItems(20);
+
+    </script>
+</html>
